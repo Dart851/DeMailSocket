@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- JDBC connection settings -->
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="connection.url">jdbc:mysql://192.168.1.3:3306/demail</property>
+		<property name="connection.username">admin</property>
+		<property name="connection.password">111111</property>
+
+		<!-- JDBC connection pool, use Hibernate internal connection pool -->
+		<property name="connection.pool_size">5</property>
+
+		<!-- Defines the SQL dialect used in Hibernate application -->
+		<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+		<!-- Enable Hibernate automatic session context management -->
+		<property name="current_session_context_class">thread</property>
+
+		<!-- Disable the second-level cache -->
+		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+		<!-- Display and format all executed SQL to stdout -->
+		<property name="show_sql">false</property>
+		<property name="format_sql">false</property>
+
+		<!-- Drop and re-create the database schema on startup -->
+		<property name="hbm2ddl.auto">update</property>
+
+		<!-- Mapping to hibernate mapping files -->
+		<mapping class="ru.t_systems.demail.model.user.User" />
+		<mapping class="ru.t_systems.demail.model.user.Role" />
+		<mapping class="ru.t_systems.demail.model.user.Country" />
+		<mapping class="ru.t_systems.demail.model.user.Account" />
+		<mapping class="ru.t_systems.demail.model.message.Label" />
+		<mapping class="ru.t_systems.demail.model.message.Message" />
+		<mapping class="ru.t_systems.demail.model.message.MessageStatuss" />
+	</session-factory>
+</hibernate-configuration>
