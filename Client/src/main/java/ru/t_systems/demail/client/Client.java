@@ -3,6 +3,8 @@ package ru.t_systems.demail.client;
 import java.net.*;
 import java.io.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ru.t_systems.demail.socket.dto.UserDTO;
 import ru.t_systems.demail.socket.dto.message.MessageStatussDTO;
 
@@ -48,14 +50,17 @@ public class Client {
             s = null;
         }
 
-        try {
-            // Create the streams to send and receive information
-            out = new ObjectOutputStream(s.getOutputStream());
-            //in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            in = new ObjectInputStream(s.getInputStream());
+        if (s != null) {
+            try {
+                // Create the streams to send and receive information
+                out = new ObjectOutputStream(s.getOutputStream());
+                //in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                in = new ObjectInputStream(s.getInputStream());
 
-        } catch (IOException e) {
-            System.out.println(e);
+            } catch (IOException e) {
+                System.out.println(e);
+                s = null;
+            }
         }
     }
 
@@ -68,7 +73,12 @@ public class Client {
     }
 
     public static Client getInstanse() {
-        return INSTANCE;
+        if (INSTANCE.s != null) {
+            return INSTANCE;
+
+        } else {
+            return null;
+        }
     }
 
     public static UserDTO getUser() {
@@ -85,5 +95,16 @@ public class Client {
 
     public static List<MessageStatussDTO> getMessageStatus() {
         return Client.messageStatussDTO;
+    }
+
+    public void close() {
+        try {
+            in.close();
+            out.close();
+            s.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

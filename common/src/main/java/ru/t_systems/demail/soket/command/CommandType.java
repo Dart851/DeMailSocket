@@ -7,9 +7,10 @@ public enum CommandType {
 	QUIT("quit"),
 	DELETE_LABEL("LabalDTO"),
         RENAME_LABEL("LabelDTO+String"),
-        GET_MESSAGE("<Set>StatusDTO"),
+        GET_MESSAGES("<Set>StatusDTO"),
         GET_SEND_MESSAGE("<Set>StatusDTO"),
-        SEND_MESSAGE("MessageDTO");
+        SEND_MESSAGE("MessageDTO"),
+        GEt_MESSAGE_BY_ID("id");
         private String typeValue;
 
 	private CommandType(String type) {

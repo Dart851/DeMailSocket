@@ -19,7 +19,6 @@ import ru.t_systems.demail.model.message.Label;
 import ru.t_systems.demail.model.message.MessageStatuss;
 import ru.t_systems.demail.socket.dto.AccountDTO;
 import ru.t_systems.demail.socket.dto.message.LabelDTO;
-import ru.t_systems.demail.socket.dto.message.MessageStatussDTO;
 
 @Entity
 @Table(name = "account")

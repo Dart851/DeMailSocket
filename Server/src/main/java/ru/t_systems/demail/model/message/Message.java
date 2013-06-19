@@ -1,9 +1,11 @@
 package ru.t_systems.demail.model.message;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -29,12 +31,19 @@ public class Message {
         this.body = body;
     }
     private Date timeStamp = new Date();
-    @OneToMany(cascade = CascadeType.ALL)
-    // @JoinTable(name = "status_message", joinColumns = { @JoinColumn(name =
-    // "message_id", referencedColumnName = "id") }, inverseJoinColumns = {
-    // @JoinColumn(name = "status_id", referencedColumnName = "id") })
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "message_id")
-    private List<MessageStatuss> status;
+    private List<MessageStatuss> messageStatus;
+    
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Integer getId() {
         return id;
@@ -53,11 +62,11 @@ public class Message {
     }
 
     public List<MessageStatuss> getStatus() {
-        return status;
+        return messageStatus;
     }
 
     public void setStatus(List<MessageStatuss> status) {
-        this.status = status;
+        this.messageStatus = status;
     }
 
     public MessageDTO toMessageDTO() {
@@ -65,6 +74,7 @@ public class Message {
         messageDTO.setBody(body);
         messageDTO.setId(id);
         messageDTO.setTimeStamp(timeStamp);
+        messageDTO.setTitle(title);
         return messageDTO;
     }
 }

@@ -28,8 +28,8 @@ public class MessageStatuss {
     private Account account;
     
     @ManyToOne
-    //@JoinColumn(name = "account_sender_id")
-    @JoinTable(name="send_status")
+    @JoinColumn(name = "account_sender_id")
+    //@JoinTable(name="send_status")
     private Account acountsSender;
     
     
@@ -37,10 +37,21 @@ public class MessageStatuss {
     private Message message;
     @ManyToOne//(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private Label label;
+    
     @Column(name = "send_date")
     private Date sendDate = new Date();
     private Boolean isRead;
     private Boolean isDeleted;
+    @Column(name = "spam")
+    private Boolean isSpam = false;
+   
+    public Boolean isSpam() {
+        return isSpam;
+    }
+
+    public void setIsSpam(Boolean isSpam) {
+        this.isSpam = isSpam;
+    }
     
     public void setDate(Date date) {
         this.sendDate = date;
@@ -128,6 +139,7 @@ public class MessageStatuss {
         status.setAccount(account.toAccountDTO());
         status.setId(id);
         status.setMessage(message.toMessageDTO());
+        status.setIsSpam(isSpam);
         return status;
     }
 }

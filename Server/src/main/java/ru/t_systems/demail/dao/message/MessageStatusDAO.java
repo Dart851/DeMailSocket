@@ -14,4 +14,5 @@ public interface MessageStatusDAO {
 	public void addStatusUser(Set<MessageStatuss> messageStatus);
 	public List<MessageStatuss> getMessageStatussByAccount(List<Account> accounts);
         public List<MessageStatuss> getMessageStatussSendByAccount(List<Account> accounts);
+        public void update(MessageStatuss messageStatuss);
 }

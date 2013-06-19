@@ -6,44 +6,49 @@ import java.util.List;
 
 public class MessageDTO implements Serializable {
 
-	private Integer id;
+    private Integer id;
+    private String body;
+    private Date timeStamp = new Date();
+    private List<MessageStatussDTO> status;
+    private String title;
 
-	private String body;
+    public String getTitle() {
+        return title;
+    }
 
-	private Date timeStamp = new Date();
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	private List<MessageStatussDTO> status;
+    public Integer getId() {
+        return id;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public String getBody() {
+        return body;
+    }
 
-	public String getBody() {
-		return body;
-	}
+    public void setBody(String body) {
+        this.body = body;
+    }
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+    public Date getTimeStamp() {
+        return timeStamp;
+    }
 
-	public Date getTimeStamp() {
-		return timeStamp;
-	}
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    public List<MessageStatussDTO> getStatus() {
+        return status;
+    }
 
-	public List<MessageStatussDTO> getStatus() {
-		return status;
-	}
-
-	public void setStatus(List<MessageStatussDTO> status) {
-		this.status = status;
-	}
-
+    public void setStatus(List<MessageStatussDTO> status) {
+        this.status = status;
+    }
 }

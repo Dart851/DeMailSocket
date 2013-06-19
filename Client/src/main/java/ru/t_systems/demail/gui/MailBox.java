@@ -4,25 +4,17 @@
  */
 package ru.t_systems.demail.gui;
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
 import ru.t_systems.demail.client.Client;
@@ -40,7 +32,7 @@ import ru.t_systems.demail.soket.command.Result;
  */
 public class MailBox extends javax.swing.JFrame {
 
-    private List<String> labb;
+    List<String> labb;
 
     /**
      * Creates new form mailbox
@@ -80,7 +72,31 @@ public class MailBox extends javax.swing.JFrame {
             // messageList.setCellRenderer(renderer);
             //  messageList.setListData(Client.getMessageStatus().toArray());
             labelList.setListData(labb.toArray());
-            labelList.addMouseListener(new MouseAdapter() {
+            if (labb.size() > 0) {
+
+
+                labelPopUp.setVisible(true);
+
+                labelList.addMouseListener(new MouseAdapter() {
+                    public void mousePressed(MouseEvent e) {
+                        check(e);
+                    }
+
+                    public void mouseReleased(MouseEvent e) {
+                        check(e);
+                    }
+
+                    public void check(MouseEvent e) {
+                        if (e.isPopupTrigger()) { //if the event shows the menu
+
+                            labelList.setSelectedIndex(labelList.locationToIndex(e.getPoint())); //select the item
+                            labelPopUp.show(labelList, e.getX(), e.getY()); //and show the menu
+
+                        }
+                    }
+                });
+            }
+            messageList.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
                     check(e);
                 }
@@ -91,8 +107,8 @@ public class MailBox extends javax.swing.JFrame {
 
                 public void check(MouseEvent e) {
                     if (e.isPopupTrigger()) { //if the event shows the menu
-                        labelList.setSelectedIndex(labelList.locationToIndex(e.getPoint())); //select the item
-                        labelPopUp.show(labelList, e.getX(), e.getY()); //and show the menu
+                        messageList.setSelectedIndex(messageList.locationToIndex(e.getPoint())); //select the item
+                        messagePopup.show(messageList, e.getX(), e.getY()); //and show the menu
                     }
                 }
             });
@@ -139,6 +155,23 @@ public class MailBox extends javax.swing.JFrame {
         newMessageBody = new javax.swing.JTextArea();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        messagePopup = new javax.swing.JPopupMenu();
+        Open = new javax.swing.JMenuItem();
+        moveMessageToFolder = new javax.swing.JMenuItem();
+        showMessage = new javax.swing.JDialog();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        showMessageTo = new javax.swing.JTextField();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
+        showMessageTitle = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        showMessageBody = new javax.swing.JTextArea();
+        Re = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        showMessageFrom = new javax.swing.JTextPane();
         jLayeredPane2 = new javax.swing.JLayeredPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         labelList = new javax.swing.JList();
@@ -151,8 +184,11 @@ public class MailBox extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         statusMailBox = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        mainFile = new javax.swing.JMenu();
+        mainLogout = new javax.swing.JMenuItem();
+        mainExit = new javax.swing.JMenuItem();
+        mainEdit = new javax.swing.JMenu();
+        mainCreateFolder = new javax.swing.JMenuItem();
 
         popLabelRename.setText("Rename");
         popLabelRename.addActionListener(new java.awt.event.ActionListener() {
@@ -223,9 +259,7 @@ public class MailBox extends javax.swing.JFrame {
 
         confirmDeleteLabel.getAccessibleContext().setAccessibleParent(popLableDelete);
 
-        confirmRenameLabel.setMaximumSize(new java.awt.Dimension(400, 150));
         confirmRenameLabel.setMinimumSize(new java.awt.Dimension(400, 150));
-        confirmRenameLabel.setPreferredSize(new java.awt.Dimension(400, 150));
         confirmRenameLabel.setResizable(false);
         confirmRenameLabel.setType(java.awt.Window.Type.UTILITY);
 
@@ -275,9 +309,7 @@ public class MailBox extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        newMessage.setMaximumSize(new java.awt.Dimension(670, 670));
         newMessage.setMinimumSize(new java.awt.Dimension(670, 670));
-        newMessage.setPreferredSize(new java.awt.Dimension(670, 670));
         newMessage.setResizable(false);
         newMessage.setType(java.awt.Window.Type.UTILITY);
 
@@ -358,6 +390,105 @@ public class MailBox extends javax.swing.JFrame {
                 .addContainerGap(144, Short.MAX_VALUE))
         );
 
+        Open.setText("Open");
+        Open.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenActionPerformed(evt);
+            }
+        });
+        messagePopup.add(Open);
+
+        moveMessageToFolder.setText("Move To");
+        moveMessageToFolder.setEnabled(false);
+        messagePopup.add(moveMessageToFolder);
+
+        showMessage.setMinimumSize(new java.awt.Dimension(670, 670));
+
+        jLabel5.setText("From:");
+
+        jLabel6.setText("To:");
+
+        showMessageTo.setEditable(false);
+
+        jLabel7.setText("Title:");
+
+        showMessageTitle.setEditable(false);
+
+        jLabel8.setText("Body:");
+
+        showMessageBody.setEditable(false);
+        showMessageBody.setColumns(20);
+        showMessageBody.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        showMessageBody.setRows(5);
+        jScrollPane4.setViewportView(showMessageBody);
+
+        Re.setText("Re");
+        Re.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Cancel");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        showMessageFrom.setEditable(false);
+        jScrollPane5.setViewportView(showMessageFrom);
+
+        javax.swing.GroupLayout showMessageLayout = new javax.swing.GroupLayout(showMessage.getContentPane());
+        showMessage.getContentPane().setLayout(showMessageLayout);
+        showMessageLayout.setHorizontalGroup(
+            showMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(showMessageLayout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addGroup(showMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(showMessageLayout.createSequentialGroup()
+                        .addComponent(Re)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton6))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel7)
+                    .addComponent(jSeparator2)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5)
+                    .addComponent(showMessageTo)
+                    .addComponent(showMessageTitle)
+                    .addComponent(jScrollPane5))
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+        showMessageLayout.setVerticalGroup(
+            showMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(showMessageLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel5)
+                .addGap(4, 4, 4)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(showMessageTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(showMessageTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(showMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Re)
+                    .addComponent(jButton6))
+                .addContainerGap(144, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
@@ -368,11 +499,6 @@ public class MailBox extends javax.swing.JFrame {
         jLayeredPane2.setEnabled(false);
         jLayeredPane2.setOpaque(true);
 
-        labelList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "1", "2", "3", "4", "5", "5", "6", "7", "8", "8", "99", "0", "0", " ", "45", "3", "45", "6", "56", "4", "56", "54", "6", " ", "546", "54", "6", "54", "6", "54", "6", "54", "6", "54", "6", "546" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         labelList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(labelList);
 
@@ -425,11 +551,37 @@ public class MailBox extends javax.swing.JFrame {
 
         statusMailBox.setText(":");
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        mainFile.setText("File");
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        mainLogout.setText("Logout");
+        mainLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainLogoutActionPerformed(evt);
+            }
+        });
+        mainFile.add(mainLogout);
+
+        mainExit.setText("Exit");
+        mainExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainExitActionPerformed(evt);
+            }
+        });
+        mainFile.add(mainExit);
+
+        jMenuBar1.add(mainFile);
+
+        mainEdit.setText("Edit");
+
+        mainCreateFolder.setText("Create new folder");
+        mainCreateFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainCreateFolderActionPerformed(evt);
+            }
+        });
+        mainEdit.add(mainCreateFolder);
+
+        jMenuBar1.add(mainEdit);
 
         setJMenuBar(jMenuBar1);
 
@@ -529,7 +681,9 @@ public class MailBox extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         new SendNewMailWorker().execute();
+//        
         newMessage.setVisible(false);
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -548,6 +702,49 @@ public class MailBox extends javax.swing.JFrame {
             new LoadOutputMailWorker().execute();
         }
     }//GEN-LAST:event_systemFolderMouseClicked
+
+    private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
+        //  System.out.print("id status" + ((Object[])messageList.getSelectedValue())[4]);
+        new LoadMessageByIdWorker().execute();
+    }//GEN-LAST:event_OpenActionPerformed
+
+    private void ReActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReActionPerformed
+        newMessageAccountRecipient.setText(showMessageFrom.getText());
+        newMessageTitle.setText("Re:" + showMessageTitle.getText());
+        String re = "Re: from " + showMessageFrom.getText();
+        newMessageAccontsSenderList.removeAllItems();
+        for (Iterator<AccountDTO> it = Client.getUser().getAccount().iterator(); it.hasNext();) {
+            AccountDTO string = it.next();
+            newMessageAccontsSenderList.addItem(string.getAccountName());
+
+        }
+        // Not selected message sender WTF?
+        newMessageAccontsSenderList.setSelectedItem(showMessageFrom.getText());
+        newMessageBody.setText(re + "\n" + showMessageBody.getText());
+        showMessage.setVisible(false);
+        newMessage.setVisible(true);
+    }//GEN-LAST:event_ReActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        showMessage.setVisible(false);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void mainLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainLogoutActionPerformed
+       Client.setMessageStatus(null);
+       Client.setSendMessageStatusDTO(null);
+       Client.setUser(null);
+       this.setVisible(false);
+       new Login().setVisible(true);
+    }//GEN-LAST:event_mainLogoutActionPerformed
+
+    private void mainExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainExitActionPerformed
+       Client.getInstanse().close();
+        System.exit(0);
+    }//GEN-LAST:event_mainExitActionPerformed
+
+    private void mainCreateFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainCreateFolderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mainCreateFolderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -584,6 +781,8 @@ public class MailBox extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Open;
+    private javax.swing.JButton Re;
     private javax.swing.JDialog confirmDeleteLabel;
     private javax.swing.JLabel confirmDeleteLabelText;
     private javax.swing.JButton confirmDeleteNo;
@@ -595,24 +794,37 @@ public class MailBox extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JList labelList;
     private javax.swing.JLabel labelNewNameConfirmRenameLabel;
     private javax.swing.JPopupMenu labelPopUp;
+    private javax.swing.JMenuItem mainCreateFolder;
+    private javax.swing.JMenu mainEdit;
+    private javax.swing.JMenuItem mainExit;
+    private javax.swing.JMenu mainFile;
+    private javax.swing.JMenuItem mainLogout;
     private javax.swing.JList messageList;
+    private javax.swing.JPopupMenu messagePopup;
     private javax.swing.JScrollPane messagesList;
+    private javax.swing.JMenuItem moveMessageToFolder;
     private javax.swing.JDialog newMessage;
     private javax.swing.JComboBox newMessageAccontsSenderList;
     private javax.swing.JTextField newMessageAccountRecipient;
@@ -621,68 +833,14 @@ public class MailBox extends javax.swing.JFrame {
     private javax.swing.JTextField newNameConfirmRenameLabel;
     private javax.swing.JMenuItem popLabelRename;
     private javax.swing.JMenuItem popLableDelete;
+    private javax.swing.JDialog showMessage;
+    private javax.swing.JTextArea showMessageBody;
+    private javax.swing.JTextPane showMessageFrom;
+    private javax.swing.JTextField showMessageTitle;
+    private javax.swing.JTextField showMessageTo;
     private javax.swing.JLabel statusMailBox;
     private javax.swing.JList systemFolder;
     // End of variables declaration//GEN-END:variables
-
-    class ComplexCellRenderer implements ListCellRenderer {
-
-        protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
-
-        public Component getListCellRendererComponent(JList list, Object value, int index,
-                boolean isSelected, boolean cellHasFocus) {
-            Font theFont = null;
-            Color theForeground = null;
-            Icon theIcon = null;
-            String theText = null;
-
-            JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index,
-                    isSelected, cellHasFocus);
-
-            if (value instanceof Object[]) {
-                Object values[] = (Object[]) value;
-                theFont = (Font) values[0];
-                theForeground = (Color) values[1];
-                theIcon = (Icon) values[2];
-                theText = (String) values[3];
-            } else {
-                theFont = list.getFont();
-                theForeground = list.getForeground();
-                theText = "";
-            }
-            if (!isSelected) {
-                renderer.setForeground(theForeground);
-            }
-            if (theIcon != null) {
-                renderer.setIcon(theIcon);
-            }
-            renderer.setText(theText);
-            renderer.setFont(theFont);
-            return renderer;
-        }
-    }
-
-    class MyIcon implements Icon {
-
-        private Color color;
-
-        public MyIcon(Color color) {
-            this.color = color;
-        }
-
-        public int getIconHeight() {
-            return 20;
-        }
-
-        public int getIconWidth() {
-            return 20;
-        }
-
-        public void paintIcon(Component c, Graphics g, int x, int y) {
-            g.setColor(color);
-            g.drawRect(0, 0, 25, 25);
-        }
-    }
 
     class DeleteLabelWorker extends SwingWorker<Integer, Integer> {
 
@@ -755,7 +913,7 @@ public class MailBox extends javax.swing.JFrame {
         protected Integer doInBackground() throws Exception {
             Set<AccountDTO> accounts = Client.getUser().getAccount();
 
-            Client.getInstanse().getOut().writeObject(new Command(CommandType.GET_MESSAGE, accounts));
+            Client.getInstanse().getOut().writeObject(new Command(CommandType.GET_MESSAGES, accounts));
             Result result = null;
             Object object = Client.getInstanse().getIn().readObject();
 
@@ -791,10 +949,10 @@ public class MailBox extends javax.swing.JFrame {
                     } else {
                         color = Color.RED;
                     }
-                    elements.add(new Object[]{new Font("Tahoma", Font.PLAIN, 12), Color.DARK_GRAY, new MyIcon(color), "to: " + messageStatussDTO.getAccount().getAccountName() + " from: " + messageStatussDTO.getAcountsSender().getAccountName() + " -- " + messageStatussDTO.getDate()});
+                    elements.add(new Object[]{new Font("Tahoma", Font.PLAIN, 12), Color.DARK_GRAY, new MyIcon(color, ru.t_systems.demail.gui.MailBox.this), "to: " + messageStatussDTO.getAccount().getAccountName() + " from: " + messageStatussDTO.getAcountsSender().getAccountName() + " -- " + messageStatussDTO.getDate(), messageStatussDTO.getId()});
                 }
 
-                ListCellRenderer renderer = new ComplexCellRenderer();
+                ListCellRenderer renderer = new ComplexCellRenderer(ru.t_systems.demail.gui.MailBox.this);
                 messageList.setCellRenderer(renderer);
                 messageList.setListData(elements.toArray());
             }
@@ -825,7 +983,7 @@ public class MailBox extends javax.swing.JFrame {
             messageStatussDTO.setIsRead(true);
             messageStatussDTOs.add(messageStatussDTO);
             messageDTO.setStatus(messageStatussDTOs);
-
+            messageDTO.setTitle(newMessageTitle.getText());
             Client.getInstanse().getOut().writeObject(new Command(CommandType.SEND_MESSAGE, messageDTO));
 
             Result result = null;
@@ -833,8 +991,13 @@ public class MailBox extends javax.swing.JFrame {
 
             if (object instanceof Result) {
                 result = (Result) object;
+            }
+            if (!result.isHasError()) {
                 statusMailBox.setText("Message send");
-
+                newMessageAccountRecipient.setText("");
+                newMessageAccontsSenderList.removeAllItems();
+                newMessageBody.setText("");
+                newMessageTitle.setText("");
             } else {
                 statusMailBox.setText("Error send message: " + result.getError());
             }
@@ -872,14 +1035,45 @@ public class MailBox extends javax.swing.JFrame {
                     // elements.add(Arrays.asList(new Font("Tahoma", Font.PLAIN, 18), Color.RED, new MyIcon(), messageStatussDTO.getAcountsSender().getAccountName()).toArray());
 
 
-                    elements.add(new Object[]{new Font("Tahoma", Font.PLAIN, 12), Color.DARK_GRAY, new MyIcon(Color.GREEN), " from: " + messageStatussDTO.getAcountsSender().getAccountName() + "to: " + messageStatussDTO.getAccount().getAccountName()});
+                    elements.add(new Object[]{new Font("Tahoma", Font.PLAIN, 12), Color.DARK_GRAY, new MyIcon(Color.GREEN, ru.t_systems.demail.gui.MailBox.this), " from: " + messageStatussDTO.getAcountsSender().getAccountName() + "to: " + messageStatussDTO.getAccount().getAccountName(), messageStatussDTO.getId()});
                 }
 
-                ListCellRenderer renderer = new ComplexCellRenderer();
+                ListCellRenderer renderer = new ComplexCellRenderer(ru.t_systems.demail.gui.MailBox.this);
                 messageList.setCellRenderer(renderer);
+
                 messageList.setListData(elements.toArray());
             }
 
+            return 42;
+        }
+
+        @Override
+        protected void done() {
+            // will be executed when background execution is done
+        }
+    }
+
+    class LoadMessageByIdWorker extends SwingWorker<Integer, Integer> {
+
+        protected Integer doInBackground() throws Exception {
+            Integer id = (Integer) ((Object[]) messageList.getSelectedValue())[4];
+
+            Client.getInstanse().getOut().writeObject(new Command(CommandType.GEt_MESSAGE_BY_ID, id));
+            Result result = null;
+            Object object = Client.getInstanse().getIn().readObject();
+
+            if (object instanceof Result) {
+                result = (Result) object;
+            }
+            if (!result.isHasError()) {
+                MessageDTO messageDTO = (MessageDTO) result.getResult();
+                // System.out.println("MessageDTO = " +messageDTO);
+                showMessage.setVisible(true);
+                showMessageFrom.setText(messageDTO.getStatus().get(0).getAcountsSender().getAccountName());
+                showMessageTo.setText(messageDTO.getStatus().get(0).getAccount().getAccountName());
+                showMessageBody.setText(messageDTO.getBody());
+                showMessageTitle.setText(messageDTO.getTitle());
+            }
             return 42;
         }
 

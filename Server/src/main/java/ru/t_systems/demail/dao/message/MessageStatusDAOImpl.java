@@ -22,6 +22,7 @@ public class MessageStatusDAOImpl implements MessageStatusDAO {
     }
 
     public MessageStatuss getMessageStatus(int id) {
+        getCurrentSession().beginTransaction();
         MessageStatuss messageStatus = (MessageStatuss) getCurrentSession()
                 .get(MessageStatuss.class, id);
         return messageStatus;
@@ -97,5 +98,11 @@ public class MessageStatusDAOImpl implements MessageStatusDAO {
         //System.out.println("Staus id "+userList.get(0).getId());
         getCurrentSession().getTransaction().commit();
         return userList;
+    }
+
+    public void update(MessageStatuss messageStatuss) {
+  getCurrentSession().beginTransaction();
+  getCurrentSession().update(messageStatuss);
+  getCurrentSession().getTransaction().commit();
     }
 }

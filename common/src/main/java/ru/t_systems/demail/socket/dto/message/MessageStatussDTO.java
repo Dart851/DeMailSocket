@@ -1,6 +1,5 @@
 package ru.t_systems.demail.socket.dto.message;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.CompareGenerator;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,7 +14,16 @@ public class MessageStatussDTO implements Serializable, Comparable<MessageStatus
     private LabelDTO label;
     private Boolean isRead;
     private Boolean isDeleted;
+    private Boolean isSpam;
     private Date date;
+
+    public Boolean isSpam() {
+        return isSpam;
+    }
+
+    public void setIsSpam(Boolean isSpam) {
+        this.isSpam = isSpam;
+    }
 
     public Integer getId() {
         return id;
@@ -82,7 +90,14 @@ public class MessageStatussDTO implements Serializable, Comparable<MessageStatus
     }
 
     public int compareTo(MessageStatussDTO other) {
-        return this.getDate().compareTo(other.getDate());
+        if (this.getDate().equals(other.getDate())) {
+            return 0;
+        } else if (this.getDate().compareTo(other.getDate()) == 1) {
+            return -1;
+        } else {
+            return 1;
+        }
+
 
 
     }

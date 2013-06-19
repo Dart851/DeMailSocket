@@ -30,12 +30,15 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
-        System.out.println("Init Components");
+
         initComponents();
-        System.out.println("Init Components complete");
-        System.out.println("Init Clients");
+
         client = Client.getInstanse();
-        System.out.println("Init Components complete");
+        if (Client.getInstanse() == null) {
+            jButton1.setEnabled(false);
+            jLabel3.setText("Server not found");
+        }
+
         setLocationRelativeTo(null);
     }
 

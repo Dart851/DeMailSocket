@@ -11,6 +11,8 @@ public interface MessageDAO {
 	
 	public Message getMessage(int id);
 	public void addMessage(Message message);
-	public List<Message> getMessageByStatus(List<MessageStatuss> status);		
+	public List<Message> getMessageByStatus(List<MessageStatuss> status);
+        public Message getMessageByStatusId(MessageStatuss status);
+        public void updateMessage(Message message);
 	
 }
